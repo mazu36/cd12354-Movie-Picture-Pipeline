@@ -1,0 +1,81 @@
+# Workflow name
+name: backend Movie Picture
+
+#env:
+#  REACT_APP_MOVIE_API_URL: http://localhost:5000  
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+      
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    branches: [main]
+    types: [edited]
+
+# Jobs defined in the workflow
+jobs:
+  backend_lint:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+      # Set up a python environment using the specified python version.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Install the dependencies.
+      - run: cd backend && pipenv install
+
+      # Run the linter.
+      - run: cd backend && pipenv run lint
+
+      # Send a console message at completion.
+      - run: |
+          echo "Hello ${{github.actor}}. Backend lint passed."
+
+  backend_test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+      # Set up a python environment using the specified python version.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Install the dependencies.
+      - run: cd backend && pipenv install
+
+      # Run the tests.
+      - run: cd backend && pipenv run test
+
+      # Send a console message at completion.
+      - run: |
+          echo "Hello ${{github.actor}}. Backend tests passed."
+
+  backend_build:
+    needs: [backend_lint, backend_lint]
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+
+      # Build image.
+      - run: cd backend && docker build --tag mp-backend:latest .
+
+      # Send a console message at completion.
+      - run: |
+          echo "Hello ${{github.actor}}. Backend build done."
