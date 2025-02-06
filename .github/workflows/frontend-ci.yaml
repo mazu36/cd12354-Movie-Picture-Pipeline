@@ -27,23 +27,23 @@ jobs:
       - name: Check out the code from the repository.
         uses: actions/checkout@v4
 
-      - name: Copy dependency files
-        run: cp starter/frontend/package*.json ./
+      #- name: Copy dependency files
+      #  run: cp starter/frontend/package*.json ./
 
       - name: Go to an application folder
         run: cd starter/frontend 
 
       - name: echo cd 1
-        run: pwd && ls
+        run: pwd 
 
       - name: Set up a Node.js environment using the specified node version.
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: latest
+          #cache: 'npm'
 
       - name: echo cd 2
-        run: pwd
+        run: ls
 
       - name: Install the dependencies.
         #run: cd starter/frontend && npm ci
