@@ -40,17 +40,18 @@ jobs:
         run: pwd
 
       - name: Set up a Node.js environment using the specified node version.
+        run: cd starter/frontend 
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
 
       - name: Install the dependencies.
-        #run: cd starter/frontend && npm ci
-        run: npm ci
+        run: cd starter/frontend && npm ci
+        #run: npm ci
 
       - name: Run the linter.
-        run: npm run lint
+        run: d starter/frontend && npm run lint
 
       - name: Send a console message at completion.
         run: |
@@ -66,8 +67,11 @@ jobs:
     steps:
       # Check out the code from the repository.
       - uses: actions/checkout@v4
+
       # Set up a Node.js environment using the specified node version.
-      - uses: actions/setup-node@v4
+      - name: xxx Set up a Node.js environment using the specified node version.
+        run: cd starter/frontend 
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
