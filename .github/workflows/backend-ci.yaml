@@ -17,7 +17,6 @@ on:
 # Jobs defined in the workflow
 jobs:
 
-
   backend_lint:
 
     runs-on: ubuntu-latest
@@ -43,4 +42,36 @@ jobs:
       # Run the tests.
       - run: cd starter/backend && pipenv run lint
 
+  backend_test:
 
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+      # Set up a python environment using the specified python version.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Install the dependencies.
+      - run: |
+          cd starter/backend 
+          pip install pipenv
+          pipenv install --system --deploy
+
+      # Run the tests.
+      - run: cd starter/backend && pipenv run test
+
+  backend_build:
+    needs: [backend_lint, backend_lint]
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+
+      # Build image.
+      - run: cd starter/backend && docker build --tag mp-backend:latest .
