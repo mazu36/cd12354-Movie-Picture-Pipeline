@@ -33,6 +33,7 @@ jobs:
 
       # Install the dependencies.
       #- run: cd starter/backend && pipenv install
+      - run: cd starter/backend && pip install pipenv
 
       # Run the linter.
       - run: cd starter/backend && pipenv run lint
@@ -58,10 +59,11 @@ jobs:
 
       # Install the dependencies.
       #- run: cd starter/backend && pipenv install
+      - run: cd starter/backend && pip install pipenv
 
       # Run the tests.
-      #- run: cd starter/backend && pipenv run test
-      - run: cd starter/backend && python test_app.py
+      - run: cd starter/backend && pipenv run test
+      #- run: cd starter/backend && python test_app.py
 
       # Send a console message at completion.
       - run: |
