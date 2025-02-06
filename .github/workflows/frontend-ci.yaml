@@ -27,8 +27,10 @@ jobs:
       - name: Check out the code from the repository.
         uses: actions/checkout@v4
 
-      - name: Copy dependency files
-        run: cp starter/frontend/package*.json ./
+      #- name: Copy dependency files
+      # run: cp starter/frontend/package*.json ./
+      - name: Go to an application folder
+        run: cd starter/frontend 
 
       - name: Set up a Node.js environment using the specified node version.
         uses: actions/setup-node@v4
@@ -37,10 +39,11 @@ jobs:
           cache: 'npm'
 
       - name: Install the dependencies.
-        run: cd starter/frontend && npm ci
+        #run: cd starter/frontend && npm ci
+        run: npm ci
 
       - name: Run the linter.
-        run: cd starter/frontend && npm run lint
+        run: npm run lint
 
       - name: Send a console message at completion.
         run: |
@@ -62,11 +65,14 @@ jobs:
           node-version: 18
           cache: 'npm'
 
+      - name: Go to an application folder
+        run: cd starter/frontend 
+
       # Install the dependencies.
-      - run: cd starter/frontend && npm ci
+      - run: npm ci
 
       # Run the tests.
-      - run: cd starter/frontend && CI=true npm test
+      - run: CI=true npm test
 
       # Send a console message at completion.
       - run: |
