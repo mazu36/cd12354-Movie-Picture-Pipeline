@@ -1,5 +1,5 @@
 # Workflow name
-name: Project Movie Picture
+name: Movie Picture frontend
 
 env:
   REACT_APP_MOVIE_API_URL: http://localhost:5000  
@@ -33,10 +33,10 @@ jobs:
           cache: 'npm'
 
       # Install the dependencies.
-      - run: cd frontend && npm ci
+      - run: cd starter/frontend && npm ci
 
       # Run the linter.
-      - run: cd frontend && npm run lint
+      - run: cd starter/frontend && npm run lint
 
       # Send a console message at completion.
       - run: |
@@ -59,10 +59,10 @@ jobs:
           cache: 'npm'
 
       # Install the dependencies.
-      - run: cd frontend && npm ci
+      - run: cd starter/frontend && npm ci
 
       # Run the tests.
-      - run: cd frontend && CI=true npm test
+      - run: cd starter/frontend && CI=true npm test
 
       # Send a console message at completion.
       - run: |
@@ -76,7 +76,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Build image.
-      - run: cd frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} --tag=mp-frontend:latest .
+      - run: cd starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} --tag=mp-frontend:latest .
 
       # Send a console message at completion.
       - run: |

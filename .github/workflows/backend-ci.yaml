@@ -1,5 +1,5 @@
 # Workflow name
-name: backend Movie Picture
+name: Movie Picture backend
 
 #env:
 #  REACT_APP_MOVIE_API_URL: http://localhost:5000  
@@ -32,10 +32,10 @@ jobs:
           python-version: '3.10'
 
       # Install the dependencies.
-      - run: cd backend && pipenv install
+      - run: cd starter/backend && pipenv install
 
       # Run the linter.
-      - run: cd backend && pipenv run lint
+      - run: cd starter/backend && pipenv run lint
 
       # Send a console message at completion.
       - run: |
@@ -57,10 +57,10 @@ jobs:
           python-version: '3.10'
 
       # Install the dependencies.
-      - run: cd backend && pipenv install
+      - run: cd starter/backend && pipenv install
 
       # Run the tests.
-      - run: cd backend && pipenv run test
+      - run: cd starter/backend && pipenv run test
 
       # Send a console message at completion.
       - run: |
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Build image.
-      - run: cd backend && docker build --tag mp-backend:latest .
+      - run: cd starter/backend && docker build --tag mp-backend:latest .
 
       # Send a console message at completion.
       - run: |
