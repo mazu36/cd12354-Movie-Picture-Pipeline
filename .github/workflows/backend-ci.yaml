@@ -33,7 +33,10 @@ jobs:
 
       # Install the dependencies.
       #- run: cd starter/backend && pipenv install
-      - run: cd starter/backend && pip install pipenv
+      #- run: cd starter/backend && pip install pipenv
+      - run: |
+          python -m pip install --upgrade pip
+          pip install pytest
 
       # Run the linter.
       - run: cd starter/backend && pipenv run lint
@@ -59,15 +62,15 @@ jobs:
 
       # Install the dependencies.
       #- run: cd starter/backend && pipenv install
-      - run: cd starter/backend && pip install pipenv
+      #- run: cd starter/backend && pip install pipenv
+      - run: |
+          python -m pip install --upgrade pip
+          pip install pytest
 
       # Run the tests.
-      - run: cd starter/backend && pipenv run test
+      #- run: cd starter/backend && pipenv run test
       #- run: cd starter/backend && python test_app.py
-
-      # Send a console message at completion.
-      - run: |
-          echo "Hello ${{github.actor}}. Backend tests passed."
+      - run: pytest starter/backend/test_app.py
 
   backend_build:
     needs: [backend_lint, backend_lint]
