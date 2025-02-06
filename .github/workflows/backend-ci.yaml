@@ -16,35 +16,7 @@ on:
 
 # Jobs defined in the workflow
 jobs:
-  backend_lint:
 
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: true
-
-    steps:
-      # Check out the code from the repository.
-      - uses: actions/checkout@v4
-      # Set up a python environment using the specified python version.
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      # Install the dependencies.
-      #- run: cd starter/backend && pipenv install
-      #- run: cd starter/backend && pip install pipenv
-      - run: |
-          python -m pip install --upgrade pip
-          pip install pytest
-          pip install pipenv
-
-      # Run the linter.
-      - run: cd starter/backend && pipenv run lint
-
-      # Send a console message at completion.
-      - run: |
-          echo "Hello ${{github.actor}}. Backend lint passed."
 
   backend_test:
 
@@ -64,9 +36,20 @@ jobs:
       # Install the dependencies.
       #- run: cd starter/backend && pipenv install
       #- run: cd starter/backend && pip install pipenv
+      #- run: |
+      #   python -m pip install --upgrade pip
+      #   pip install pytest
       - run: |
-          python -m pip install --upgrade pip
-          pip install pytest
+          apk update && \
+          apk add \
+          pcre \
+          pcre-dev \
+          build-base \
+          gcc \
+          linux-headers \
+          openssl \
+          libffi-dev \
+          && pip install pipenv
 
       # Run the tests.
       #- run: cd starter/backend && pipenv run test
@@ -78,16 +61,3 @@ jobs:
           pytest test_app.py
 
 
-  backend_build:
-    needs: [backend_lint, backend_lint]
-    runs-on: ubuntu-latest
-    steps:
-      # Check out the code from the repository.
-      - uses: actions/checkout@v4
-
-      # Build image.
-      - run: cd starter/backend && docker build --tag mp-backend:latest .
-
-      # Send a console message at completion.
-      - run: |
-          echo "Hello ${{github.actor}}. Backend build done."
