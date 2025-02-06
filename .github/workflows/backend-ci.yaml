@@ -38,6 +38,7 @@ jobs:
           cd starter/backend 
           pip install pipenv
           pipenv install --system --deploy
+          pip install flake8
 
       # Run the tests.
       - run: cd starter/backend && pipenv run lint
