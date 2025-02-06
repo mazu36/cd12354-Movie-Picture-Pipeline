@@ -34,7 +34,7 @@ jobs:
         run: cd starter/frontend 
 
       - name: echo cd 1
-        run: pwd
+        run: pwd && ls
 
       - name: Set up a Node.js environment using the specified node version.
         uses: actions/setup-node@v4
@@ -46,7 +46,8 @@ jobs:
         run: pwd
 
       - name: Install the dependencies.
-        run: cd starter/frontend && npm ci
+        #run: cd starter/frontend && npm ci
+        run: cd starter/frontend && npm install
         #run: npm ci
 
       - name: Run the linter.

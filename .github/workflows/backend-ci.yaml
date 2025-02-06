@@ -67,7 +67,7 @@ jobs:
       - run: cd starter/backend && pipenv run test
 
   backend_build:
-    needs: [backend_lint, backend_lint]
+    needs: [backend_lint, backend_test]
     runs-on: ubuntu-latest
     steps:
       # Check out the code from the repository.
