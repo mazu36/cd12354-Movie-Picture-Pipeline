@@ -70,7 +70,12 @@ jobs:
       # Run the tests.
       #- run: cd starter/backend && pipenv run test
       #- run: cd starter/backend && python test_app.py
-      - run: pytest starter/backend/test_app.py
+      # pytest starter/backend/test_app.py
+      - run: |
+          ls 
+          cd starter/backend 
+          pytest test_app.py
+
 
   backend_build:
     needs: [backend_lint, backend_lint]

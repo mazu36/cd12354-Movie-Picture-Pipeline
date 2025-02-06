@@ -28,8 +28,9 @@ jobs:
         uses: actions/checkout@v4
 
 
-      #- name: Copy dependency files
-      # run: cp starter/frontend/package*.json ./
+      - name: Copy dependency files
+       run: cp starter/frontend/package*.json ./
+       
       - name: Go to an application folder
         run: cd starter/frontend 
 
