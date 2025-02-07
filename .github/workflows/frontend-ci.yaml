@@ -14,7 +14,7 @@ on:
     branches: 
       - main
     paths:
-      - 'starter/frontend'
+      - 'starter/frontend/**'
 
 # Jobs defined in the workflow
 jobs:
