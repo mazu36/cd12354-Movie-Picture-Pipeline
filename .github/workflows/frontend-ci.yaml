@@ -9,7 +9,7 @@ on:
   # Manual trigger using the workflow_dispatch event
   workflow_dispatch:
       
-  # Automatic trigger on pull request events targeting the main branch
+  # Automatic trigger on pull request events targeting the main branch and frontend changed
   pull_request:
     branches: 
       - main
@@ -36,7 +36,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: latest
-          #cache: 'npm'
+          cache: 'npm'
 
       - name: Install the dependencies.
         #run: cd starter/frontend && npm ci
@@ -63,7 +63,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: latest
-          #cache: 'npm'
+          cache: 'npm'
 
       - name: Install the dependencies.
         #run: cd starter/frontend && npm ci
