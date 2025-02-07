@@ -14,7 +14,7 @@ on:
     branches: 
       - main
     paths:
-      - 'starter/frontend'
+      - 'starter/frontend/**'
 
 # Jobs defined in the workflow
 jobs:
@@ -36,7 +36,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: latest
-          cache: 'npm'
+          #cache: 'npm'
 
       - name: Install the dependencies.
         #run: cd starter/frontend && npm ci
@@ -63,7 +63,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: latest
-          cache: 'npm'
+          #cache: 'npm'
 
       - name: Install the dependencies.
         #run: cd starter/frontend && npm ci
