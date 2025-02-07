@@ -9,7 +9,7 @@ on:
   # Manual trigger using the workflow_dispatch event
   workflow_dispatch:
       
-  # Automatic trigger on pull request events targeting the main branch
+  # Automatic trigger on pull request events targeting the main branch and frontend changed
   pull_request:
     branches: 
       - main
