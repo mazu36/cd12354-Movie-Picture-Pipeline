@@ -11,8 +11,10 @@ on:
       
   # Automatic trigger on pull request events targeting the main branch
   pull_request:
-    branches: [main]
-    types: [edited]
+    branches: 
+      - main
+    paths:
+      - 'starter/backend/**'
 
 # Jobs defined in the workflow
 jobs:
