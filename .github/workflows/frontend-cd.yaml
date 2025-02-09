@@ -3,6 +3,7 @@ name: Movie Picture frontend CD
 
 env:
   REACT_APP_MOVIE_API_URL: http://localhost:5000  
+  REPOSITORY: frontend
 
 # Triggers for the workflow
 on:
@@ -15,8 +16,6 @@ on:
       - main
     paths:
       - 'starter/frontend/**'
-env:
-  REPOSITORY: frontend
 
 # Jobs defined in the workflow
 jobs:
