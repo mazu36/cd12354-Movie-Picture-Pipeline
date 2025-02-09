@@ -1,5 +1,5 @@
 # Workflow name
-name: Movie Picture frontend
+name: Movie Picture frontend CD
 
 env:
   REACT_APP_MOVIE_API_URL: http://localhost:5000  
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
       
   # Automatic trigger on pull request events targeting the main branch and frontend changed
-  pull_request:
+  push:
     branches: 
       - main
     paths:
@@ -72,7 +72,6 @@ jobs:
       - name: Run the tests.
         run: cd starter/frontend && CI=true npm test
 
-
   frontend_build:
     needs: [frontend_lint, frontend_test]
     runs-on: ubuntu-latest
@@ -80,5 +79,38 @@ jobs:
       # Check out the code from the repository.
       - uses: actions/checkout@v4
 
-      # Build image.
-      - run: cd starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} --tag=mp-frontend:latest .
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: frontend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd starter/frontend 
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v2
+        with:
+          version: 'latest'
+
+      - name: Deploy to Kubernetes
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name cluster
+          cd starter/frontend/k8s
+          kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          kustomize build | kubectl apply -f -
+
+
