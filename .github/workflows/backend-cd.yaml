@@ -1,5 +1,5 @@
 # Workflow name
-name: Movie Picture backend
+name: Movie Picture backend CD
 
 #env:
 #  REACT_APP_MOVIE_API_URL: http://localhost:5000  
@@ -98,7 +98,7 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Set up kubectl
-        uses: azure/setup-kubectl@v2
+        uses: azure/setup-kubectl@v4
         with:
           version: 'latest'
 
