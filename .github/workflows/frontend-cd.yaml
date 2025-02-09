@@ -98,8 +98,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           cd starter/frontend 
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} -t ${{env.$REGISTRY}}/${{env.$REPOSITORY}}:${{env.$IMAGE_TAG}} .
+          docker push ${{env.$REGISTRY}}/${{env.$REPOSITORY}}:${{env.$IMAGE_TAG}} 
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v4
@@ -110,7 +110,8 @@ jobs:
         run: |
           aws eks --region us-east-1 update-kubeconfig --name cluster
           cd starter/frontend/k8s
-          kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image is ${{env.$REGISTRY}}/${{env.$REPOSITORY:}}${{env.$IMAGE_TAG}}"
+          kustomize edit set image frontend=${{env.$REGISTRY}}/${{env.$REPOSITORY:}}${{env.$IMAGE_TAG}}
           kustomize build | kubectl apply -f -
 
 
