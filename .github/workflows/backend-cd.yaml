@@ -1,0 +1,111 @@
+# Workflow name
+name: Movie Picture backend
+
+#env:
+#  REACT_APP_MOVIE_API_URL: http://localhost:5000  
+
+# Triggers for the workflow
+on:
+  # Manual trigger using the workflow_dispatch event
+  workflow_dispatch:
+      
+  # Automatic trigger on pull request events targeting the main branch and backend changed
+  push:
+    branches: 
+      - main
+    paths:
+      - 'starter/backend/**'
+
+# Jobs defined in the workflow
+jobs:
+
+  backend_lint:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+      # Set up a python environment using the specified python version.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Install the dependencies.
+      - run: |
+          cd starter/backend 
+          pip install pipenv
+          pipenv install --system --deploy
+          pip install flake8
+
+      # Run the tests.
+      - run: cd starter/backend && pipenv run lint
+
+  backend_test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+      # Set up a python environment using the specified python version.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Install the dependencies.
+      - run: |
+          cd starter/backend 
+          pip install pipenv
+          pipenv install --system --deploy
+
+      # Run the tests.
+      - run: cd starter/backend && pipenv run test
+
+  backend_build:
+    needs: [backend_lint, backend_test]
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the code from the repository.
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: backend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd starter/backend 
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v2
+        with:
+          version: 'latest'
+
+      - name: Deploy to Kubernetes
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name cluster
+          cd starter/backend/k8s
+          kustomize edit set image backend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          kustomize build | kubectl apply -f -
+
