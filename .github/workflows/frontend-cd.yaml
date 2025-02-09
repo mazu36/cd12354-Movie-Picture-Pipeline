@@ -15,7 +15,6 @@ on:
       - main
     paths:
       - 'starter/frontend/**'
-
 env:
   REPOSITORY: frontend
 
