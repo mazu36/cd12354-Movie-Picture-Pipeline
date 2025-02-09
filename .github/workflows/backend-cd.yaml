@@ -88,6 +88,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push docker image to Amazon ECR
+        id: docker-task
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: backend
@@ -104,6 +105,10 @@ jobs:
           version: 'latest'
 
       - name: Deploy to Kubernetes
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: backend
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           aws eks --region us-east-1 update-kubeconfig --name cluster
           cd starter/backend/k8s
