@@ -112,6 +112,7 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
+          REACT_APP_MOVIE_API_URL: ${{env.REACT_APP_MOVIE_API_URL}} 
         run: |
 
           echo "image in deploy is ${REGISTRY}/${{env.REPOSITORY}}:${IMAGE_TAG}"
