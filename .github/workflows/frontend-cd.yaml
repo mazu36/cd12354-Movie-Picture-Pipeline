@@ -3,7 +3,6 @@ name: Frontend Continuous Deployment
 
 env:
   REPOSITORY: frontend
-  REACT_APP_MOVIE_API_URL: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
 
 # Triggers for the workflow
 on:
@@ -99,7 +98,7 @@ jobs:
         run: |
           echo "image in push is ${REGISTRY}/${{env.REPOSITORY}}:${IMAGE_TAG}"
           cd starter/frontend 
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} -t ${REGISTRY}/${{env.REPOSITORY}}:${IMAGE_TAG} .
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=${{vars.REACT_APP_MOVIE_API_URL}} -t ${REGISTRY}/${{env.REPOSITORY}}:${IMAGE_TAG} .
           docker push ${REGISTRY}/${{env.REPOSITORY}}:${IMAGE_TAG}
 
       - name: Set up kubectl
