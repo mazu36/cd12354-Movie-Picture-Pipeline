@@ -3,11 +3,8 @@ name: Frontend Continuous Integration
 
 env:
   #REACT_APP_MOVIE_API_URL: http://localhost:5000
-  REACT_APP_MOVIE_API_HOST: ${{ vars.REACT_APP_MOVIE_API_HOST}} 
-  #REACT_APP_MOVIE_API_URL: ${{ format('http://${0}:5000', env.REACT_APP_MOVIE_API_HOST) }}
-
   REACT_APP_MOVIE_API_URL: format('http://${0}:5000', ${{ vars.REACT_APP_MOVIE_API_HOST }} )
-  REACT_APP_MOVIE_API_URL2: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
+  #REACT_APP_MOVIE_API_URL2: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
 
   #REACT_APP_MOVIE_API_URL: ${{ format('env.{0}', inputs.choice) }}
       
@@ -107,6 +104,9 @@ jobs:
 
       - name: Run the tests.
         run: cd starter/frontend && CI=true npm test
+
+      - name: echo
+        run: $REACT_APP_MOVIE_API_URL
 
       # Build image.
       - run: cd starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} --tag=mp-frontend:latest .
