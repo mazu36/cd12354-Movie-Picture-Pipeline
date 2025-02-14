@@ -3,7 +3,7 @@ name: Frontend Continuous Integration
 
 env:
   #REACT_APP_MOVIE_API_URL: http://localhost:5000
-  REACT_APP_MOVIE_API_URL: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
+  REACT_APP_MOVIE_API_URL: {{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
 
 
 # Triggers for the workflow
