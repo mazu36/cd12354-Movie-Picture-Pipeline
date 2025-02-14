@@ -1,9 +1,9 @@
 FROM  public.ecr.aws/docker/library/node:18.14.2-alpine3.17
 
 ARG REACT_APP_MOVIE_API_URL
-RUN "echo argument REACT_APP_MOVIE_API_URL: $REACT_APP_MOVIE_API_URL"
+RUN env
 ENV REACT_APP_MOVIE_API_URL=${REACT_APP_MOVIE_API_URL}
-RUN "echo env REACT_APP_MOVIE_API_URL: $REACT_APP_MOVIE_API_URL"
+RUN env
 
 WORKDIR /app
 
@@ -21,6 +21,8 @@ RUN npm run build
 
 # Expose the port used by the React app
 EXPOSE 3000
+
+RUN env
 
 # Start the React app when the container starts
 CMD ["npm", "run", "serve"]
