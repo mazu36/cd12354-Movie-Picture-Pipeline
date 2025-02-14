@@ -2,6 +2,7 @@
 name: Backend Continuous Deployment
 
 env:
+  REPOSITORY: backend
   REACT_APP_MOVIE_API_HOST: ${{ vars.REACT_APP_MOVIE_API_HOST}}
   REACT_APP_MOVIE_API_URL: http://${{env.REACT_APP_MOVIE_API_HOST}}:5000
 
@@ -16,8 +17,6 @@ on:
       - main
     paths:
       - 'starter/backend/**'
-env:
-  REPOSITORY: backend
 
 # Jobs defined in the workflow
 jobs:
