@@ -1,9 +1,9 @@
 # Workflow name
-name: Movie Picture frontend CD
+name: Frontend Continuous Deployment
 
 env:
-  REACT_APP_MOVIE_API_URL: http://localhost:5000  
   REPOSITORY: frontend
+  REACT_APP_MOVIE_API_URL: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
 
 # Triggers for the workflow
 on:
