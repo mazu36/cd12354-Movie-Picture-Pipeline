@@ -3,10 +3,9 @@ name: Frontend Continuous Integration
 
 env:
   #REACT_APP_MOVIE_API_URL: http://localhost:5000
-  REACT_APP_MOVIE_API_URL: format('http://${0}:5000', ${{ vars.REACT_APP_MOVIE_API_HOST }} )
-  #REACT_APP_MOVIE_API_URL2: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
+  #REACT_APP_MOVIE_API_URL: format('http://${0}:5000', ${{ vars.REACT_APP_MOVIE_API_HOST }} )
+  REACT_APP_MOVIE_API_URL: ${{ format('http://${0}:5000', vars.REACT_APP_MOVIE_API_HOST) }}
 
-  #REACT_APP_MOVIE_API_URL: ${{ format('env.{0}', inputs.choice) }}
       
 
 # Triggers for the workflow
@@ -31,6 +30,9 @@ jobs:
       fail-fast: true
 
     steps:
+      - name: echo
+        run: echo $REACT_APP_MOVIE_API_URL
+
       - name: Check out the code from the repository.
         uses: actions/checkout@v4
 
@@ -106,7 +108,7 @@ jobs:
         run: cd starter/frontend && CI=true npm test
 
       - name: echo
-        run: $REACT_APP_MOVIE_API_URL
+        run: echo $REACT_APP_MOVIE_API_URL
 
       # Build image.
       - run: cd starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} --tag=mp-frontend:latest .
