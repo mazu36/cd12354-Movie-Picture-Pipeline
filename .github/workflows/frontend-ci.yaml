@@ -1,8 +1,11 @@
 # Workflow name
-name: Movie Picture frontend CI 
+name: Frontend Continuous Integration
 
 env:
-  REACT_APP_MOVIE_API_URL: http://localhost:5000  
+  #REACT_APP_MOVIE_API_URL: http://localhost:5000
+  REACT_APP_MOVIE_API_HOST: ${{ vars.REACT_APP_MOVIE_API_HOST}}
+  REACT_APP_MOVIE_API_URL: http://${{env.REACT_APP_MOVIE_API_HOST}}:5000
+      
 
 # Triggers for the workflow
 on:
@@ -76,9 +79,29 @@ jobs:
   frontend_build:
     needs: [frontend_lint, frontend_test]
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
     steps:
       # Check out the code from the repository.
       - uses: actions/checkout@v4
+
+      - name: Copy package-lock.json files
+        run: cp starter/frontend/package-lock.json .
+
+      - name: Set up a Node.js environment using the specified node version.
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: 'npm'
+
+      - name: Install the dependencies.
+        #run: cd starter/frontend && npm ci
+        run: cd starter/frontend && npm install
+
+      - name: Run the tests.
+        run: cd starter/frontend && CI=true npm test
 
       # Build image.
       - run: cd starter/frontend && docker build --build-arg=REACT_APP_MOVIE_API_URL=${{env.REACT_APP_MOVIE_API_URL}} --tag=mp-frontend:latest .

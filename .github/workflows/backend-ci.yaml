@@ -1,8 +1,5 @@
 # Workflow name
-name: Movie Picture backend CI
-
-#env:
-#  REACT_APP_MOVIE_API_URL: http://localhost:5000  
+name: Backend Continuous Integration
 
 # Triggers for the workflow
 on:

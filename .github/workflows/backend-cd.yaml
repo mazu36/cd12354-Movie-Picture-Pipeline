@@ -1,8 +1,9 @@
 # Workflow name
-name: Movie Picture backend CD
+name: Backend Continuous Deployment
 
-#env:
-#  REACT_APP_MOVIE_API_URL: http://localhost:5000  
+env:
+  REACT_APP_MOVIE_API_HOST: ${{ vars.REACT_APP_MOVIE_API_HOST}}
+  REACT_APP_MOVIE_API_URL: http://${{env.REACT_APP_MOVIE_API_HOST}}:5000
 
 # Triggers for the workflow
 on:
